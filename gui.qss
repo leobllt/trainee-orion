@@ -1,0 +1,28 @@
+QLabel{
+    font-weight: bold;
+}
+
+#status{
+    color: black; 
+    border-radius: 10px;
+}
+
+.statusDesligado{
+    background-color: grey; 
+}
+
+.statusOK{
+    background-color: #6BBF59; 
+}
+
+.statusEmergencia{
+    background-color: yellow; 
+}
+
+QPushButton{
+    padding: 5px;
+}
+
+#botao2{
+    background-color: #C30010;
+}
