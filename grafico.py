@@ -8,6 +8,8 @@ from PySide6.QtCore import Qt
 class Grafico(QChartView):
     def __init__(self):
         super().__init__()
+        self.qtdMax = 20 # qt max de valores na tela no momento
+        self.actual_min = 0 # min valor do eixo x
         self.build()
 
     def build(self):
@@ -60,5 +62,10 @@ class Grafico(QChartView):
 
     def adicionarValor(self, x, y):
         self.series.append(x, y)
-        self.chart.axisX().setRange(0,self.series.count())
+
+        if self.series.count() > self.qtdMax:
+            self.series.remove(0)
+            self.actual_min = self.series.at(0).x()
+
+        self.chart.axisX().setRange(self.actual_min, self.series.count() + self.actual_min + 1)
         #self.repaint()
