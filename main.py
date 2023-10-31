@@ -1,13 +1,19 @@
+# Arquivo principal do aplicativo, responsável por gerenciar tudo
+
 import sys
-from gui import (JanelaInterativa, JanelaVisualizadora)
+import time
 from PySide6.QtWidgets import (QMainWindow, QApplication, QHBoxLayout, QWidget)
 from PySide6.QtCore import (Qt, QFile, QTextStream)
+from grafico import Grafico
+from gui import JanelaInterativa
+from datasource import DataSource
 
 # É a janela pai de todas as demais
 # também contém as variáveis usadas no programa todo
 class JanelaPrincipal(QMainWindow):
 	def __init__(self):
 		super().__init__()
+		self.conexao = False
 		self.build()
 
 	def build(self):
@@ -22,10 +28,10 @@ class JanelaPrincipal(QMainWindow):
 		# definindo o layout / disposição de cada componente
 		layout = QHBoxLayout() # na horizontal		
 		# são duas seções, lado a lado
-		secao1 = JanelaInterativa()
-		secao2 = JanelaVisualizadora()
-		layout.addWidget(secao1)
-		layout.addWidget(secao2)
+		self.secao1 = JanelaInterativa(self)
+		self.secao2 = Grafico()
+		layout.addWidget(self.secao1)
+		layout.addWidget(self.secao2)
 		layout.setAlignment(Qt.AlignTop)
 		layout.setContentsMargins(5, 0, 0, 5)
 
@@ -36,9 +42,38 @@ class JanelaPrincipal(QMainWindow):
 
 		# configurações da janela
 		self.setWindowTitle("Sistema de monitoramento")
-		self.setFixedSize(1000, 500)
+		self.setMinimumSize(1000, 500)
 
-
+		# teste
+		self.dados = enumerate(DataSource.dadosTeste())
+	
+	def conectar(self):
+		#...
+		if not self.conexao:
+			self.conexao = True
+			self.secao2.setVisible(True)
+			return True
+		else:
+			return False
+	
+	def teste(self):
+		try:
+			x, y = next(self.dados)
+			self.secao2.adicionarValor(x, float(y))
+			self.secao1.concentracao.setText(y + " ppm")
+			if(float(y) >= 5000):
+				self.secao1.setAlerta()
+			else:
+				self.secao1.setOK()
+		except StopIteration:
+			print('fim dados teste')
+	
+	def keyPressEvent(self, event):
+		if event.key() == Qt.Key_Escape:
+			self.close()
+		elif event.key() == Qt.Key_T and self.conexao:
+			self.teste()
+			
 
 # INICIO
 if __name__ == '__main__':

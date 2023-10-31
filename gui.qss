@@ -15,6 +15,11 @@ QLabel{
     background-color: #6BBF59; 
 }
 
+.statusAlerta{
+    background-color: red; 
+}
+
+
 .statusEmergencia{
     background-color: yellow; 
 }
@@ -25,4 +30,8 @@ QPushButton{
 
 #botao2{
     background-color: #C30010;
+}
+
+#concentracao{
+    color: rgb(253, 177, 87)
 }

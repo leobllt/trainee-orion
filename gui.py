@@ -1,13 +1,17 @@
+# Arquivo com as classes do GUI
+
 import time
 from PySide6.QtWidgets import *
 from PySide6.QtCore import (Qt, QSize)
 #from PySide6.QtGui import QValidator
+from grafico import Grafico
 
 
 # Janela com interação: botões, inputs...
 class JanelaInterativa(QWidget):
-    def __init__(self):
+    def __init__(self, parent):
         super().__init__()
+        self.parent = parent
         self.build()
     
     def build(self):
@@ -39,10 +43,23 @@ class JanelaInterativa(QWidget):
         layout.addWidget(combo2)
         layout.addSpacing(20)
         # }
+
+         # combo 3 {
+        label3 = QLabel("CONCENTRAÇÃO HC4:")
+        #label3.setFixedHeight(20)
+        self.concentracao = QLabel('-')
+        self.concentracao.setObjectName("concentracao")
+        combo3 = Combo([label3, self.concentracao])
+        temp = combo3.layout()
+        temp.setSpacing(15)
+        combo3.setLayout(temp)
+        layout.addWidget(combo3)
+        layout.addSpacing(20)
+        # }
     
         # {
-        label3 = QLabel("LOGS:")
-        layout.addWidget(label3)
+        label4 = QLabel("LOGS:")
+        layout.addWidget(label4)
         self.logger = logsViewer()
         layout.addWidget(self.logger)
         # }
@@ -60,36 +77,38 @@ class JanelaInterativa(QWidget):
         # demais configurações
         layout.setAlignment(Qt.AlignTop)
         self.setLayout(layout)
-        self.setFixedSize(300, 500)
+        self.setFixedWidth(300)
     
-    # ação do botão 1
-    def buttonAction(self):
+    def setOK(self):
         self.status.setProperty("class", "statusOK")
         self.status.style().unpolish(self.status)
         self.status.style().polish(self.status)
-        self.logger.alert("Conectado com sucesso!")
-        self.logger.alert("Lendo dados...")
-    
-    # ação do botão 2
-    def buttonAction2(self):
+
+    def setEmergencia(self):
         self.status.setProperty("class", "statusEmergencia")
         self.status.style().unpolish(self.status)
         self.status.style().polish(self.status)
-        self.logger.alert("<b>ATENÇÃO: coloque água.</b>")
     
+    def setAlerta(self):
+        self.status.setProperty("class", "statusAlerta")
+        self.status.style().unpolish(self.status)
+        self.status.style().polish(self.status)
+
+    # ação do botão 1
+    def buttonAction(self):
+        if self.parent.conectar():
+            self.setOK()
+            self.logger.alert("Conectado com sucesso!")
+            self.logger.alert("Lendo dados...")
+    
+    # ação do botão 2
+    def buttonAction2(self):
+        self.setEmergencia()
+        self.logger.alert("<b>ATENÇÃO: coloque água.</b>")
+
     # ação do botão 3
     def buttonAction3(self):
         self.logger.setText("")
-
-
-# Janela para visualização: gráfico, logs...
-class JanelaVisualizadora(QWidget):
-    def __init__(self):
-        super().__init__()
-        self.build()
-    
-    def build(self):
-        self.setFixedSize(700, 500)
 
 
 # Widget que reúne 'subwidgets'/compenentes tal como num combo horizontal
@@ -112,6 +131,7 @@ class Combo(QWidget):
         self.setLayout(layout)
         
 
+# Widget de visualização de logs
 class logsViewer(QTextEdit):
     def __init__(self):
         super().__init__()
