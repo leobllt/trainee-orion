@@ -23,6 +23,7 @@ class JanelaInterativa(QWidget):
         input1 = QLineEdit()
         input1.setPlaceholderText("COM")
         self.button1 = QPushButton("CONECTAR")
+        self.button1.setObjectName("button1")
         self.button1.clicked.connect(self.buttonAction)
         combo1 = Combo([label1, input1, self.button1])
         layout.addWidget(combo1)
@@ -62,11 +63,12 @@ class JanelaInterativa(QWidget):
         layout.addWidget(label4)
         self.logger = logsViewer()
         layout.addWidget(self.logger)
+        layout.addSpacing(10)
         # }
 
         # {
         self.button2 = QPushButton("⚠ EMERGÊNCIA")
-        self.button2.setObjectName("botao2")
+        self.button2.setObjectName("button2")
         self.button2.clicked.connect(self.buttonAction2)
         #self.button3 = QPushButton("LIMPAR LOGS")
         #self.button3.clicked.connect(self.buttonAction3)
@@ -103,8 +105,9 @@ class JanelaInterativa(QWidget):
     
     # ação do botão 2
     def buttonAction2(self):
-        self.setEmergencia()
-        self.logger.alert("<b>ATENÇÃO: coloque água.</b>")
+        if self.parent.conexao:
+            self.setEmergencia()
+            self.logger.alert('<b><span style="color:red;">ATENÇÃO: coloque água.</span></b>')
 
     # ação do botão 3
     def buttonAction3(self):
@@ -139,4 +142,4 @@ class logsViewer(QTextEdit):
     
     def alert(self, msg):
         t = time.localtime() # obtendo tempo real
-        self.append(f'{time.strftime("%H:%M:%S", t)}: {msg}')
+        self.append(f'<b>{time.strftime("%H:%M:%S", t)}:</b> {msg}')

@@ -27,6 +27,7 @@ class Grafico(QChartView):
 
         # Personalizando
         fonte = QFont()
+        fonte.setFamily("Jost")
         fonte.setPixelSize(16)
         fonte.setBold(True)
         self.chart.setTitleFont(fonte)
@@ -47,6 +48,9 @@ class Grafico(QChartView):
         # Eixo y:
         eixoY = QValueAxis()
         eixoY.setTitleText("PPM")
+        fonte2 = QFont()
+        fonte2.setFamily("Jost")
+        eixoY.setTitleFont(fonte2)
         eixoY.setTitleBrush(QBrush(Qt.white))
         eixoY.setLabelsBrush(QBrush(Qt.white))
         eixoY.setRange(200, 10000)
@@ -58,6 +62,7 @@ class Grafico(QChartView):
 
         self.setChart(self.chart)
         self.setRenderHint(QPainter.Antialiasing)
+        self.setBackgroundBrush(QBrush(QColor().fromRgb(34, 34, 34)))
         self.setVisible(False)
 
     def adicionarValor(self, x, y):
@@ -67,5 +72,5 @@ class Grafico(QChartView):
             self.series.remove(0)
             self.actual_min = self.series.at(0).x()
 
-        self.chart.axisX().setRange(self.actual_min, self.series.count() + self.actual_min + 1)
+        self.chart.axisX().setRange(self.actual_min, self.series.count() + self.actual_min)
         #self.repaint()

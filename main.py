@@ -3,7 +3,8 @@
 import sys
 import time
 from PySide6.QtWidgets import (QMainWindow, QApplication, QHBoxLayout, QWidget)
-from PySide6.QtCore import (Qt, QFile, QTextStream)
+from PySide6.QtCore import (Qt, QFile, QTextStream, QDir)
+from PySide6.QtGui import QFontDatabase
 from grafico import Grafico
 from gui import JanelaInterativa
 from datasource import DataSource
@@ -18,7 +19,7 @@ class JanelaPrincipal(QMainWindow):
 
 	def build(self):
 		# carregando estilos:
-		file = QFile("gui.qss")
+		file = QFile("styles/gui.qss")
 		if not file.open(QFile.ReadOnly):
 			print("Erro ao abrir arquivo de estilos.")
 		else:
@@ -33,7 +34,7 @@ class JanelaPrincipal(QMainWindow):
 		layout.addWidget(self.secao1)
 		layout.addWidget(self.secao2)
 		layout.setAlignment(Qt.AlignTop)
-		layout.setContentsMargins(5, 0, 0, 5)
+		#layout.setContentsMargins(5, 0, 0, 5)
 
 		# criando o container, para aplicar o layout
 		innerWindow = QWidget(self) 
@@ -79,6 +80,8 @@ class JanelaPrincipal(QMainWindow):
 if __name__ == '__main__':
 	# criando app e janela principal onde trabalharemos
 	app = QApplication(sys.argv)
+	dir_ = QDir("styles")
+	QFontDatabase.addApplicationFont("styles/Jost-Regular.ttf")
 	window = JanelaPrincipal()
 	window.show()
 	sys.exit(app.exec())
