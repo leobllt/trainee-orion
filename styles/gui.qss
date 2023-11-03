@@ -1,0 +1,76 @@
+* {
+    font-family: Jost;
+    font-size: 14px;
+    color: white;
+}
+
+QMainWindow{
+    background-color: #272727;
+}
+    
+
+QLineEdit{
+    height: 20px;
+    padding-left: 5px;
+    border-radius: 10px;
+    background-color: rgba(250,250,250,0.1);
+}
+
+QTextEdit{
+    padding-left: 5px;
+    border-radius: 10px;
+    background-color: rgba(250,250,250,0.1);
+}
+
+#button1{
+    color: black;
+    background-color: rgb(200,200,200);
+    padding: 1px 8px;
+    border-radius: 10px;
+    border-style: outset;
+    border-width: 1px;
+    border-color: #292929;
+}
+
+#button1:hover {
+    background-color: rgba(200,200,200, 0.7);
+}
+
+#button2{
+    background-color: rgb(195, 0, 16);
+    padding: 1px 8px;
+    border-radius: 10px;
+    border-style: outset;
+    border-width: 1px;
+    border-color: #292929;
+}
+
+#button2:hover {
+    background-color: rgba(195, 0, 16, 0.7);
+}
+
+#status{
+    color: black;
+    border-radius: 10px;
+}
+
+.statusDesligado{
+    background-color: rgba(250,250,250,0.1); 
+}
+
+.statusOK{
+    background-color: #6BBF59; 
+}
+
+.statusAlerta{
+    background-color: red; 
+}
+
+
+.statusEmergencia{
+    background-color: yellow; 
+}
+
+#concentracao{
+    color: rgb(253, 177, 87)
+}
