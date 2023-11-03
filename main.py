@@ -52,7 +52,6 @@ class JanelaPrincipal(QMainWindow):
 		#...
 		if not self.conexao:
 			self.conexao = True
-			self.secao2.setVisible(True)
 			return True
 		else:
 			return False

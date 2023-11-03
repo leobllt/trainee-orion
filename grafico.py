@@ -63,7 +63,6 @@ class Grafico(QChartView):
         self.setChart(self.chart)
         self.setRenderHint(QPainter.Antialiasing)
         self.setBackgroundBrush(QBrush(QColor().fromRgb(34, 34, 34)))
-        self.setVisible(False)
 
     def adicionarValor(self, x, y):
         self.series.append(x, y)
