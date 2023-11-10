@@ -5,9 +5,9 @@ import time
 from PySide6.QtWidgets import (QMainWindow, QApplication, QHBoxLayout, QWidget)
 from PySide6.QtCore import (Qt, QFile, QTextStream, QDir)
 from PySide6.QtGui import QFontDatabase
-from grafico import Grafico
-from gui import JanelaInterativa
-from datasource import DataSource
+from src.grafico import Grafico
+from src.gui import JanelaInterativa
+from src.datasource import DataSource
 
 # É a janela pai de todas as demais
 # também contém as variáveis usadas no programa todo
