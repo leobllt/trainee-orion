@@ -1,20 +1,22 @@
 # Arquivo principal do aplicativo, responsável por gerenciar tudo
 
 import sys
-import time
 from PySide6.QtWidgets import (QMainWindow, QApplication, QHBoxLayout, QWidget)
-from PySide6.QtCore import (Qt, QFile, QTextStream, QDir)
+from PySide6.QtCore import (Qt, QFile, QTextStream, QDir, QTimer)
 from PySide6.QtGui import QFontDatabase
 from src.grafico import Grafico
 from src.gui import JanelaInterativa
 from src.datasource import DataSource
+from codigo_arduino.ponte import ArduinoUno
 
 # É a janela pai de todas as demais
 # também contém as variáveis usadas no programa todo
 class JanelaPrincipal(QMainWindow):
 	def __init__(self):
 		super().__init__()
-		self.conexao = False
+		self.arduino = None
+		self.conectado = False
+		self.timer = None
 		self.build()
 
 	def build(self):
@@ -44,35 +46,34 @@ class JanelaPrincipal(QMainWindow):
 		# configurações da janela
 		self.setWindowTitle("Sistema de monitoramento")
 		self.setMinimumSize(1000, 500)
+		self.timer = QTimer(self)
+		self.timer.timeout.connect(self.loop)
+		self.timer.start(100)
 
-		# teste
-		self.dados = enumerate(DataSource.dadosTeste())
 	
-	def conectar(self):
-		#...
-		if not self.conexao:
-			self.conexao = True
-			return True
-		else:
-			return False
+	def conectar(self, porta):
+		if self.conectado:
+			return
+		
+		self.arduino = ArduinoUno(porta)
+		if self.arduino.board == None:
+			return
+		# se chegou até aqui, conexão foi estabelecida
+		self.conectado = True
 	
-	def teste(self):
-		try:
-			x, y = next(self.dados)
-			self.secao2.adicionarValor(x, float(y))
-			self.secao1.concentracao.setText(y + " ppm")
-			if(float(y) >= 5000):
-				self.secao1.setAlerta()
-			else:
-				self.secao1.setOK()
-		except StopIteration:
-			print('fim dados teste')
+	def loop(self):
+		if self.conectado:
+			valorLido, valorConvertido, OK = self.arduino.lerDados()
+			self.secao1.mostrarDados(valorConvertido, OK)
+			self.secao2.adicionarValor(valorConvertido)
 	
 	def keyPressEvent(self, event):
 		if event.key() == Qt.Key_Escape:
 			self.close()
-		elif event.key() == Qt.Key_T and self.conexao:
-			self.teste()
+	
+	def closeEvent(self,event):
+		self.arduino.board.exit()
+		event.accept()
 			
 
 # INICIO

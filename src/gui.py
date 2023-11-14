@@ -12,6 +12,7 @@ class JanelaInterativa(QWidget):
     def __init__(self, parent):
         super().__init__()
         self.parent = parent
+        self.emergencia = False
         self.build()
     
     def build(self):
@@ -20,12 +21,12 @@ class JanelaInterativa(QWidget):
         # COMPONENTES:
         # combo 1 {
         label1 = QLabel("PORTA: ")
-        input1 = QLineEdit()
-        input1.setPlaceholderText("COM")
+        self.input1 = QLineEdit()
+        self.input1.setPlaceholderText("COM")
         self.button1 = QPushButton("CONECTAR")
         self.button1.setObjectName("button1")
         self.button1.clicked.connect(self.buttonAction)
-        combo1 = Combo([label1, input1, self.button1])
+        combo1 = Combo([label1, self.input1, self.button1])
         layout.addWidget(combo1)
         layout.addSpacing(15)
         # }
@@ -70,6 +71,7 @@ class JanelaInterativa(QWidget):
         self.button2 = QPushButton("⚠ EMERGÊNCIA")
         self.button2.setObjectName("button2")
         self.button2.clicked.connect(self.buttonAction2)
+        self.button2.setEnabled(False)
         #self.button3 = QPushButton("LIMPAR LOGS")
         #self.button3.clicked.connect(self.buttonAction3)
         combo3 = Combo([self.button2])
@@ -90,6 +92,11 @@ class JanelaInterativa(QWidget):
         self.status.setProperty("class", "statusEmergencia")
         self.status.style().unpolish(self.status)
         self.status.style().polish(self.status)
+
+    def unset(self):
+        self.status.setProperty("class", "statusDesligado")
+        self.status.style().unpolish(self.status)
+        self.status.style().polish(self.status)
     
     def setAlerta(self):
         self.status.setProperty("class", "statusAlerta")
@@ -98,20 +105,37 @@ class JanelaInterativa(QWidget):
 
     # ação do botão 1
     def buttonAction(self):
-        if self.parent.conectar():
-            self.setOK()
+        self.parent.conectar(self.input1.text())
+        if self.parent.conectado:
             self.logger.alert("Conectado com sucesso!")
-            self.logger.alert("Lendo dados...")
+            self.logger.alert("Lendo dados...")  
+            self.button1.setEnabled(False)
+            self.button2.setEnabled(True)
+        else:
+            self.logger.alert("Erro ao se conectar.")  
     
     # ação do botão 2
     def buttonAction2(self):
-        if self.parent.conexao:
-            self.setEmergencia()
-            self.logger.alert('<b><span style="color:red;">ATENÇÃO: coloque água.</span></b>')
+        if self.parent.conectado:
+            self.emergencia = not self.emergencia
+            self.parent.arduino.alternarEmergencia()
+            if(self.emergencia):
+                self.setEmergencia()
+                self.logger.alert('<b><span style="color:red;">ATENÇÃO: coloque água.</span></b>')
+            else:
+                self.unset()
 
     # ação do botão 3
     def buttonAction3(self):
         self.logger.setText("")
+
+    def mostrarDados(self, valorConvertido, OK):
+        self.concentracao.setText(f'{valorConvertido} PPM')
+        if not self.emergencia:
+            if OK:
+                self.setOK()
+            else:
+                self.setAlerta()
 
 
 # Widget que reúne 'subwidgets'/compenentes tal como num combo horizontal

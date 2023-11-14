@@ -10,6 +10,7 @@ class Grafico(QChartView):
         super().__init__()
         self.qtdMax = 20 # qt max de valores na tela no momento
         self.actual_min = 0 # min valor do eixo x
+        self.x = 0 # inicio
         self.build()
 
     def build(self):
@@ -64,8 +65,9 @@ class Grafico(QChartView):
         self.setRenderHint(QPainter.Antialiasing)
         self.setBackgroundBrush(QBrush(QColor().fromRgb(34, 34, 34)))
 
-    def adicionarValor(self, x, y):
-        self.series.append(x, y)
+    def adicionarValor(self, y):
+        self.x += 1
+        self.series.append(self.x, y)
 
         if self.series.count() > self.qtdMax:
             self.series.remove(0)

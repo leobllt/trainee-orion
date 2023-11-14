@@ -1,6 +1,6 @@
 #define pinoSensorGas A0 // sensor MQ4
-#define pinoLedAmarelo 13
-#define pinoLedVerde 12
+#define pinoLedVerde 13
+#define pinoLedAmarelo 12
 #define pinoLedVermelho 11
 #define limiar 5000 // ppm, valor recomendado no datasheet
 #define sensorMin 200 // ppm
@@ -39,7 +39,7 @@ void loop()
     digitalWrite(pinoLedVermelho, LOW);
     //Serial.println("Adicione água!");
   }
-  else if(valorLido > limiar)
+  else if(valorConvertido > limiar)
   {
     digitalWrite(pinoLedVermelho, HIGH);
     digitalWrite(pinoLedVerde, LOW);
