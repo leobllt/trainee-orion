@@ -56,9 +56,7 @@ class ArduinoUno:
             self.pinoLedAmarelo.write(0)
     
     # método que retorna um dado lido
-    def lerDados(self):    
-        if self.emergencia:
-            return    
+    def lerDados(self):      
         valorLido = self.pinoSensorGas.read()
         if valorLido == None:
             print('nao leu do analogico')

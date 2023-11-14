@@ -6,7 +6,6 @@ from PySide6.QtCore import (Qt, QFile, QTextStream, QDir, QTimer)
 from PySide6.QtGui import QFontDatabase
 from src.grafico import Grafico
 from src.gui import JanelaInterativa
-from src.datasource import DataSource
 from codigo_arduino.ponte import ArduinoUno
 
 # É a janela pai de todas as demais
