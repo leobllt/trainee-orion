@@ -1,5 +1,11 @@
 # trainee-orion
 
-- Requisitos:  PySide6 Qt
+- Requisitos:  
+        * **Python**, version 3.8 ou superior
+        * **PIP**, versão mais atual
+        * Biblioteca **PySide6**
+        * Biblioteca **pyfirmata**
 
-- Executar:  $python3 main.py
+- Executar programa:
+        * **Windows**: python main.py
+        * **Linux Ubuntu**: python3 main.py
